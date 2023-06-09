@@ -62,7 +62,7 @@ public class BoardListServlet extends HttpServlet {
 			pageNo++;
 		}
 		
-		if(pageNo==totalPage) {
+		if(pageNo>totalPage) {
 			pageBar+="<span>[다음]</span>";
 		}else {
 			pageBar+="<a href='"+request.getRequestURI()+"?cPage="+(pageNo)+"&numPerPage="+numPerPage+"'>[다음]</a>";
@@ -70,7 +70,7 @@ public class BoardListServlet extends HttpServlet {
 		
 		request.setAttribute("pageBar", pageBar);
 		request.setAttribute("board", boards);
-		request.getRequestDispatcher("").forward(request, response);
+		request.getRequestDispatcher("/views/board/boardList.jsp").forward(request, response);
 	}
 
 

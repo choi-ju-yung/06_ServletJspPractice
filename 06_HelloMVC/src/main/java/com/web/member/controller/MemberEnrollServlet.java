@@ -23,7 +23,7 @@ public class MemberEnrollServlet extends HttpServlet {
 		
 		// 회원가입 화면을 출력해주는 서블릿
 		// RequestDispatcher로 처리
-		request.getRequestDispatcher("/views/member/memberenroll.jsp")
+		request.getRequestDispatcher("/views/member/enrollmember.jsp")
 		.forward(request, response);
 		
 	}
