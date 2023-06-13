@@ -25,9 +25,11 @@ java.util.List,com.web.board.model.vo.BoardComment"%>
     table#tbl-comment tr td:last-of-type {text-align:right; width: 100px;}
     table#tbl-comment button.btn-reply{display:none;}
     table#tbl-comment button.btn-delete{display:none;}
+    table#tbl-comment button.btn-update{display:none;}
     table#tbl-comment tr:hover {background:lightgray;}
     table#tbl-comment tr:hover button.btn-reply{display:inline;}
     table#tbl-comment tr:hover button.btn-delete{display:inline;}
+    table#tbl-comment tr:hover button.btn-update{display:inline;}
     table#tbl-comment tr.level2 {color:gray; font-size: 14px;}
     table#tbl-comment sub.comment-writer {color:navy; font-size:14px}
     table#tbl-comment sub.comment-date {color:tomato; font-size:10px}
@@ -92,7 +94,8 @@ java.util.List,com.web.board.model.vo.BoardComment"%>
    		</div>
    		<table id="tbl-comment">
    		<%if(comments!=null) {
-   			for(BoardComment bc:comments){%>
+   			for(BoardComment bc:comments){
+   			if(bc.getLevel()==1){%>
    			<tr class="level1">
    				<td>
    					<sub class="comment-writer"><%=bc.getBoardCommentWriter() %></sub>
@@ -101,13 +104,27 @@ java.util.List,com.web.board.model.vo.BoardComment"%>
    					<%=bc.getBoardCommentContent() %>
    				</td>
    				<td>
-   					<button class="btn-reply">답글</button>
-   					
-   					<button class="btn-reply">수정</button>
-   					<button class="btn-reply">삭제</button>
+   					<%if(loginMember!=null) {%>
+   					<button class="btn-reply" value="<%=bc.getBoardCommentNo()%>">답글</button>
+   					<button class="btn-update">수정</button>
+   					<button class="btn-delete">삭제</button>
+   					<%} %>
    				</td>
    			</tr>
-   			<%} %>
+   			
+   			
+   			<%} else{%>
+   			  <tr class="level2">
+   				<td>
+   					<sub class="comment-writer"><%=bc.getBoardCommentWriter() %></sub>
+   					<sub class="comment-date"><%=bc.getBoardCommentDate() %></sub>
+   					<br>
+   					<%=bc.getBoardCommentContent() %>
+   				</td>
+   				<td></td>
+   			</tr>
+   		<%} 
+   		} %>
    		<%} %>
    		</table>
     </section>
@@ -118,6 +135,35 @@ java.util.List,com.web.board.model.vo.BoardComment"%>
 				$("#userId").focus();
 			}
 		})
+		
+		
+		$(".btn-reply").click(e=>{
+			const tr=$("<tr>");
+			const td=$("<td>").attr("colspan","2");
+			const boardCommentRef=$(e.target).val();
+
+			
+			const form=$(".comment-editor>form").clone(); // 복사하는 메소드 = clone()
+			form.find("textarea").attr("rows",1);  // textarea 속성바꾸기
+			form.find("input[name=level]").val("2");
+			form.find("input[name=boardCommentRef]").val(boardCommentRef);
+
+			td.css("display","none");
+			td.append(form);
+			tr.append(td);
+			
+			tr.insertAfter($(e.target).parents("tr")).children("td").slideDown(800); // 답글눌렀을때 슬라이드 효과 추가
+			
+			
+			
+			$(e.target).off("click");
+		})
+		
+/* 		$(".btn-reply").on(e=>{
+			alert("클릭!");
+		}) */
+		
+		
     </script>
  
     

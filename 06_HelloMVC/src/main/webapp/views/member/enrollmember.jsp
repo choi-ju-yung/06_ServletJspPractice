@@ -128,35 +128,47 @@
 				}else{
 					alert("아이디는 4글자이상 입력하세요!");
 				}
-				
-
 			}
 				
 		
 		
-			/* const check_enroll=()=>{
-				const userId=$("#userId_").val();
-				const pass = $("#password_").val();
-				const checkpass = $("#password2_").val();
-				
+			$("#userId_").keyup(e=>{
+				if(e.target.value.length>=4){
+				$.ajax({
+					url:"<%=request.getContextPath()%>/ajaxDuplicateId.do",
+					data:{"userId":$(e.target).val()},
+					success:function(data){
+						let msg="",css={};
+						if(data==='true'){
+							msg="사용가능한 아이디입니다.";
+							css={color:"green"};
+						}else{
+							msg="사용 불가능한 아이디입니다.";
+							css={color:"red"};
+						}
+						const tr=$("<tr>");
+						const td=$("<td colspan='2'>").text(msg).css(css);
+						tr.append(td);
+						if($(e.target).parents("tr").next().find("input").length==0){
+							$(e.target).parents("tr").next().remove();
+						}
+						$(e.target).parents("tr").after(tr);
+					},
 		
-				if(userId.length<4 && pass != checkpass){
-					alert("아이디 4글자이상 입력 + 비밀번호가 동일한지 확인해주세요");
-					return false;
-					
-				}else if(pass != checkpass){
-					alert("비밀번호가 일치하지 않습니다.");
-					$("#password2_").val("");  // 문구띄어주고 아이디 빈칸으로바꾸고
-					$("#passwrod2_").focus(); 
-					return false;
-					
-				}else if(userId.length<4){
-					alert("아이디는 4글자 이상 입력하세요.");
-					$("#userId").val("");  // 문구띄어주고 아이디 빈칸으로바꾸고
-					$("#userId").focus(); // 아이디부분에 포커스줌
-					return false; // false면 값이 넘어가지 않음
+					error:function(data){
+						console.log(r);
+						console.log(m);
+					}
+				});
+				}else{
+					if($(e.target).parents("tr").next().find("input").length==0){
+						$(e.target).parents("tr").next().remove();
+					}
 				}
-			} */
+			})
+			
+			
+			
 		</script>
  		
  		
